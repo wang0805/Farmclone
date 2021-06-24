@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
 import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
@@ -8,7 +9,7 @@ contract Token is ERC20, Ownable {
 
 	constructor() ERC20('Test Token', 'TT') {
 		// 1,000,000, just for testing purposes, should replace with a mint/block function
-		_mint(msg.sender, 10**6); 
+		_mint(msg.sender, 10**6);
 	}
 
 	function transfer(address recipient, uint256 amount) public override returns (bool) {
