@@ -13,9 +13,12 @@ describe('Token', function () {
 		[owner, addrOne] = await ethers.getSigners();
 		const factory = await ethers.getContractFactory('Token');
 		token = (await factory.deploy()) as Token;
+		// start owner with 1,000,000 tokens for testing purposes
+		const mintTx = await token.mint(owner.address, 1_000_000);
+		await mintTx.wait();
 	});
 
-	// these tests aren't necessary, just for demonstrative purposes
+	// these are already tested in the OpenZepplin spec, just here for demonstrative purposes
 	describe('inheritance tests', function () {
 		it('has the right name and symbol', async function () {
 			expect(await token.name()).to.equal('Test Token');
@@ -27,28 +30,23 @@ describe('Token', function () {
 				'Ownable: caller is not the owner',
 			);
 		});
+
+		it('transfers tokens', async function () {
+			const addrOneStart = await token.balanceOf(addrOne.address);
+			expect(addrOneStart).to.equal(0);
+
+			const transferTx = await token.transfer(addrOne.address, BigNumber.from(1_000));
+			await transferTx.wait();
+
+			const addrOneEnd = await token.balanceOf(addrOne.address);
+			expect(addrOneEnd).to.equal(BigNumber.from(1_000));
+
+			const ownerBalance = await token.balanceOf(owner.address);
+			expect(ownerBalance).to.equal(BigNumber.from(999_000));
+		});
 	});
 
-	it('mints 1,000,000 tokens to the owner of the contract', async function () {
-		const balance = await token.balanceOf(owner.address);
-		expect(balance).to.equal(BigNumber.from(1_000_000));
-	});
-
-	it('transfers tokens', async function () {
-		const addrOneStart = await token.balanceOf(addrOne.address);
-		expect(addrOneStart).to.equal(0);
-
-		const transferTx = await token.transfer(addrOne.address, BigNumber.from(1_000));
-		await transferTx.wait();
-
-		const addrOneEnd = await token.balanceOf(addrOne.address);
-		expect(addrOneEnd).to.equal(BigNumber.from(1_000));
-
-		const ownerBalance = await token.balanceOf(owner.address);
-		expect(ownerBalance).to.equal(BigNumber.from(999_000));
-	});
-
-	it('allows owner to mint tokens', async function () {
+	it('mint tokens', async function () {
 		const mintTx = await token.mint(addrOne.address, BigNumber.from(1_000));
 		await mintTx.wait();
 

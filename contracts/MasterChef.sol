@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
+import 'hardhat/console.sol'; // lets us console.log in here
+
 import '@openzeppelin/contracts/access/Ownable.sol';
 import '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
 import '@openzeppelin/contracts/security/ReentrancyGuard.sol';
@@ -55,8 +57,7 @@ contract MasterChef is Ownable, ReentrancyGuard {
 	event EmergencyWithdraw(address indexed user, uint256 indexed pid, uint256 amount);
 	event SetFeeAddress(address indexed user, address indexed newAddress);
 	event SetDevAddress(address indexed user, address indexed newAddress);
-	event SetVaultAddress(address indexed user, address indexed newAddress);
-	event UpdateEmissionRate(address indexed user, uint256 fishPerBlock);
+	event UpdateEmissionRate(address indexed user, uint256 tokensPerBlock);
 
 	constructor(
 		Token _token,
@@ -64,6 +65,7 @@ contract MasterChef is Ownable, ReentrancyGuard {
 		address _feeAddress,
 		uint256 _startBlock
 	) {
+		console.log('Block number:', block.number);
 		token = _token;
 		devAddress = _devAddress;
 		feeAddress = _feeAddress;
@@ -152,7 +154,7 @@ contract MasterChef is Ownable, ReentrancyGuard {
 		uint256 tokenReward = multiplier.mul(tokensPerBlock).mul(pool.allocPoint).div(
 			totalAllocPoint
 		);
-		token.mint(devAddress, tokenReward.div(10));
+		token.mint(devAddress, tokenReward.div(10)); // extra 10% of all tokens minted go to devAddress
 		token.mint(address(this), tokenReward);
 		pool.accTokensPerShare = pool.accTokensPerShare.add(tokenReward.mul(1e18).div(lpSupply));
 		pool.lastRewardBlock = block.number;
