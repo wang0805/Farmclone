@@ -10,7 +10,9 @@
 	},
 	"author": "",
 	"license": "ISC",
-	"dependencies": {},
+	"dependencies": {
+		"dotenv": "^10.0.0"
+	},
 	"devDependencies": {
 		"@nomiclabs/hardhat-ethers": "^2.0.2",
 		"@nomiclabs/hardhat-waffle": "^2.0.1",

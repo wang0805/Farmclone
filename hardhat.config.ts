@@ -1,7 +1,10 @@
 import '@typechain/hardhat';
 import '@nomiclabs/hardhat-waffle';
+import dotenv from 'dotenv';
 import { HardhatUserConfig } from 'hardhat/types';
 import { task } from 'hardhat/config';
+
+dotenv.config();
 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
@@ -18,6 +21,13 @@ const config: HardhatUserConfig = {
 		outDir: 'types',
 		target: 'ethers-v5',
 		alwaysGenerateOverloads: false,
+	},
+	networks: {
+		mumbai: {
+			// dah! India!
+			url: process.env.MUMBAI_INFURA_URL,
+			accounts: [`0x${process.env.MUMBAI_PRIVATE_KEY}`],
+		},
 	},
 };
 
