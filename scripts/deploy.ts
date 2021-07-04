@@ -13,9 +13,6 @@ async function main() {
 	const token = await tokenFactory.deploy();
 
 	console.log('Token address:', token.address);
-
-	const tokenBalance = await token.getBalance();
-	console.log('Token gwei balance:', tokenBalance.toString());
 }
 
 main()

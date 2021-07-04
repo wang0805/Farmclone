@@ -3,6 +3,7 @@ import '@nomiclabs/hardhat-waffle';
 import dotenv from 'dotenv';
 import { HardhatUserConfig } from 'hardhat/types';
 import { task } from 'hardhat/config';
+import { Ownable } from './types/Ownable';
 
 dotenv.config();
 
@@ -14,6 +15,17 @@ task('accounts', 'Prints the list of accounts', async (_args, hre) => {
 	accounts.forEach(({ address }) => console.log(address));
 });
 
+// just an example of how to interact with an existing contract
+task('owner', "get contract's owner")
+	.addParam('address', 'contract address')
+	.setAction(async ({ address }, hre) => {
+		const ownableFactory = await hre.ethers.getContractAt('Ownable', address);
+		const ownable = ownableFactory.attach(address) as Ownable;
+
+		const owner = await ownable.owner();
+		console.log('Owner:', owner.toString());
+	});
+
 // Go to https://hardhat.org/config/ to learn more
 const config: HardhatUserConfig = {
 	solidity: '0.8.4',
@@ -24,7 +36,6 @@ const config: HardhatUserConfig = {
 	},
 	networks: {
 		mumbai: {
-			// dah! India!
 			url: process.env.MUMBAI_INFURA_URL,
 			accounts: [`0x${process.env.MUMBAI_PRIVATE_KEY}`],
 		},
