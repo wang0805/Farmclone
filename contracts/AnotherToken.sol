@@ -4,7 +4,7 @@ pragma solidity ^0.8.4;
 import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
 import '@openzeppelin/contracts/access/Ownable.sol';
 
-contract AnotherToken is ERC20('Another Token', 'ATT'), Ownable {
+contract AnotherToken is ERC20('Another Token', 'WWH'), Ownable {
 	event TokenBurnt(uint256 amount);
 
 	function mint(address recipient_, uint256 amount_) public onlyOwner returns (bool) {

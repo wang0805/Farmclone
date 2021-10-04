@@ -21,3 +21,7 @@ main()
 		console.error(error);
 		process.exit(1);
 	});
+
+
+// Mumbai Token address: 0x877474298CaF38Db78A282562479ceaD67c644Db
+// Kovan Token address: 0x1e274493be80fE9a5fF4C3C7e246A1E12555593A
